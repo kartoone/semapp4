@@ -1,32 +1,64 @@
-"use client"; // 👈 Mark this file as client-side
+"use client";
 
-import { createClient } from "@/lib/supabase/server";
+import { useState } from "react";
+import { recordSales } from "./actions/record-sales";
 
-async function handleSubmit(e:any) {
-    const supabase = await createClient();
-    
-    // Prevent the browser from reloading the page
-    e.preventDefault();
+export default function NewSales() {
+  const [message, setMessage] = useState("");
 
-    // Read the form data
-    const form = e.target;
-    const formData = new FormData(form);
-    const degC = formData.get("degC");
-    alert(`It was '${degC}'`);
+  async function handleSubmit(formData: FormData) {
+    setMessage("");
 
-    const { error } = await supabase
-  .from('sales')
-  .insert({ degC: Number(degC), ice_cream_sales: 252, coffee_sales: 51 })
+    const result = await recordSales(formData);
+
+    if (result.success) {
+      setMessage("Thanks! Your information was submitted.");
+    } else {
+      setMessage(result.error ?? "Something went wrong.");
+    }
   }
 
-export default async function NewSales() {
-
   return (
-    <form action="/processsales">
-      <input name="degC" />
-      <input name="icecream" />
-      <input name="coffee" />
-      <button type="submit">Add</button>
-    </form>
+    <main>
+      <h1>Submit Information</h1>
+
+      <form action={handleSubmit}>
+        <div>
+          <label htmlFor="degC">Temperature (°C)</label>
+          <input
+            id="degC"
+            name="degC"
+            type="text"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="ice_cream_sales">Ice Cream Sales</label>
+          <input
+            id="ice_cream_sales"
+            name="ice_cream_sales"
+            type="text"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="coffee_sales">Coffee Sales</label>
+          <input
+            id="coffee_sales"
+            name="coffee_sales"
+            type="text"
+            required
+          />
+        </div>
+
+        <button type="submit">
+          Submit
+        </button>
+      </form>
+
+      {message && <p>{message}</p>}
+    </main>
   );
 }
