@@ -1,7 +1,10 @@
 "use client"; // 👈 Mark this file as client-side
 
-export default function NewSales() {
-  function handleSubmit(e:any) {
+import { createClient } from "@/lib/supabase/server";
+
+async function handleSubmit(e:any) {
+    const supabase = await createClient();
+    
     // Prevent the browser from reloading the page
     e.preventDefault();
 
@@ -10,10 +13,16 @@ export default function NewSales() {
     const formData = new FormData(form);
     const degC = formData.get("degC");
     alert(`It was '${degC}'`);
+
+    const { error } = await supabase
+  .from('sales')
+  .insert({ degC: Number(degC), ice_cream_sales: 252, coffee_sales: 51 })
   }
 
+export default async function NewSales() {
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form action="/processsales">
       <input name="degC" />
       <input name="icecream" />
       <input name="coffee" />
