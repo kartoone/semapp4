@@ -12,7 +12,7 @@ export async function recordSales(formData: FormData) {
   if (!sales_date || !degC || !ice_cream_sales || !coffee_sales) {
     return {
       success: false,
-      error: "All fields are required."
+      error: "All fields are requiredd."
     };
   }
 
