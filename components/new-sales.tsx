@@ -24,6 +24,16 @@ export default function NewSales() {
 
       <form action={handleSubmit}>
         <div>
+          <label htmlFor="sales_date">Sales Date</label>
+          <input
+            id="sales_date"
+            name="sales_date"
+            type="datetime-local"
+            required
+          />
+        </div>
+
+        <div>
           <label htmlFor="degC">Temperature (°C)</label>
           <input
             id="degC"
