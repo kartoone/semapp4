@@ -13,12 +13,12 @@ async function fetchSales() {
 }
 
 export default async function Sales() {
-  const sales = await fetchSales();
+  let sales = await fetchSales();
 
   return (
     <div>
       <div>Needs refreshing: {false ? "Yes" : "No"}</div>
-      <button onClick={fetchSales}>Refresh</button>
+      <button onClick={async () => sales = await fetchSales()}>Refresh</button>
     <ul>
       {sales?.map((sale) => (
         <li key={sale.id}>{sale.sales_date}</li>
