@@ -5,24 +5,8 @@ import { InfoIcon } from "lucide-react";
 import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
 import { Suspense } from "react";
 import NewSales from "@/components/new-sales"
+import Sales from "@/components/sales";
 
-async function Sales() {
-  const supabase = await createClient();
-  
-  const {data:sales, error} = await supabase.from('sales').select();
-
-  if (error || !sales) {
-    redirect("/auth/login") 
-  }
-
-  return (
-    <ul>
-      {sales?.map((sale) => (
-        <li key={sale.id}>{sale.sales_date}</li>
-      ))}
-    </ul>
-  )
-}
 
 async function UserDetails() {
   const supabase = await createClient();
