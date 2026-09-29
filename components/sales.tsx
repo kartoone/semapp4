@@ -18,7 +18,7 @@ export default async function Sales() {
   return (
     <div>
       <div>Needs refreshing: {false ? "Yes" : "No"}</div>
-      <button onClick={() => fetchSales()}>Refresh</button>
+      <button onClick={fetchSales}>Refresh</button>
     <ul>
       {sales?.map((sale) => (
         <li key={sale.id}>{sale.sales_date}</li>
