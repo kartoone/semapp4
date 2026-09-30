@@ -1,29 +1,28 @@
-"use client";
-
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { RefreshButton } from "@/components/refresh-button";
 
 async function fetchSales() {
   const supabase = await createClient();
-  const {data:sales, error} = await supabase.from('sales').select();
+  const { data: sales, error } = await supabase.from("sales").select();
   if (error || !sales) {
-    redirect("/auth/login") 
+    redirect("/auth/login");
   }
   return sales;
 }
 
 export default async function Sales() {
-  let sales = await fetchSales();
+  const sales = await fetchSales();
 
   return (
     <div>
       <div>Needs refreshing: {false ? "Yes" : "No"}</div>
-      <button onClick={async () => sales = await fetchSales()}>Refresh</button>
-    <ul>
-      {sales?.map((sale) => (
-        <li key={sale.id}>{sale.sales_date}</li>
-      ))}
-    </ul>
+      <RefreshButton />
+      <ul>
+        {sales?.map((sale) => (
+          <li key={sale.id}>{sale.sales_date}</li>
+        ))}
+      </ul>
     </div>
-  )
+  );
 }
