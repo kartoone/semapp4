@@ -1,26 +1,27 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { refreshSales } from "@/components/actions/refresh-sales";
 
 export async function recordSales(formData: FormData) {
   const supabase = await createClient();
-  const sales_date = formData.get("sales_date")?.toString().trim();
   const degC = Number(formData.get("degC")?.toString().trim());
+  const sales_date = formData.get("sales_date")?.toString().trim();
   const ice_cream_sales = Number(formData.get("ice_cream_sales")?.toString().trim());
   const coffee_sales = Number(formData.get("coffee_sales")?.toString().trim());
 
-  if (!sales_date || !degC || !ice_cream_sales || !coffee_sales) {
+  if (!sales_date || Number.isNaN(degC) || Number.isNaN(ice_cream_sales) || Number.isNaN(coffee_sales)) {
     return {
       success: false,
-      error: "All fields are requiredd."
+      error: "Please fill in the date, temperature, and both sales counts."
     };
   }
 
   const { error } = await supabase
     .from("sales")
     .insert({
-      sales_date: sales_date,
       degC: degC,
+      sales_date: sales_date,
       ice_cream_sales: ice_cream_sales,
       coffee_sales: coffee_sales
     });
@@ -30,11 +31,14 @@ export async function recordSales(formData: FormData) {
 
     return {
       success: false,
-      error: "Unable to save submission."
+      error: "Unable to save this day."
     };
   }
 
+  refreshSales();
+  
   return {
     success: true
   };
+
 }
