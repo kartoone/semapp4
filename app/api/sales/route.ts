@@ -48,6 +48,7 @@ function userClient(token: string) {
 
 export async function GET(request: Request) {
   const auth = await requireAuth(request);
+  
   if (auth.error) return auth.error;
 
   const token = getAccessToken(request)!;
