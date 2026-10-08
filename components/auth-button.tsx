@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { LogoutButton } from "./logout-button";
+import { MyButton } from "./mybutton";
 
 export async function AuthButton() {
   const supabase = await createClient();
@@ -17,9 +18,7 @@ export async function AuthButton() {
     </div>
   ) : (
     <div className="flex gap-2">
-      <Button size="sm" variant={"outline"} onClick={() => (window.location.href = "/api/auth/authorize")}>
-        Sign in
-      </Button>
+     <MyButton />
     </div>
   );
 }
